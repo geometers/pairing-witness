@@ -22,12 +22,12 @@ pub(crate) fn exp<F: Field>(x: F, bits: &[u8]) -> F {
 pub(crate) fn sample_27th_root_of_unity<R: RngCore>(rng: &mut R) -> Fq12 {
     let one = Fq12::one();
 
-    let pow_9 = |x: Fq12| -> bool { x.pow(&[9, 0, 0, 0]) != one };
+    let not_9th = |x: Fq12| -> bool { x.pow(&[9, 0, 0, 0]) != one };
 
     loop {
         let x = Fq12::rand(rng);
         let w = exp(x, &K);
-        if w != one && pow_9(w) {
+        if not_9th(w) {
             return w;
         }
     }
